@@ -29,19 +29,19 @@ hl.bind(mainMod .. " + SHIFT + U",     hl.dsp.window.resize(up), opts('up'))
 hl.bind(mainMod .. " + SHIFT + N",     hl.dsp.window.resize(down), opts('down'))
 
 -- Change focus
-hl.bind(mainMod .. " + Left",  hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + Right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + Up",    hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + Down",  hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + U",  hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + O", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + I",    hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + comma",  hl.dsp.focus({ direction = "down" }))
 hl.bind("ALT + Tab",           hl.dsp.window.cycle_next())
 -- hl.bind(mainMod .. " + Tab",   hl.dsp.exec_cmd(noctCall .. "active"))
 hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("~/.config/hypr/scripts/switch_workspace.zsh"))
 
 -- Move active window around workspaces & monitors
-hl.bind(mainMod .. " + SHIFT + Up",                   hl.dsp.window.move({ direction = "u" }))
-hl.bind(mainMod .. " + SHIFT + Right",                hl.dsp.window.move({ direction = "r" }))
-hl.bind(mainMod .. " + SHIFT + Left",                 hl.dsp.window.move({ direction = "l" }))
-hl.bind(mainMod .. " + SHIFT + Down",                 hl.dsp.window.move({ direction = "d" }))
+hl.bind(mainMod .. " + SHIFT + I",                   hl.dsp.window.move({ direction = "u" }))
+hl.bind(mainMod .. " + SHIFT + apostrophe",                hl.dsp.window.move({ direction = "r" }))
+hl.bind(mainMod .. " + SHIFT + semicolon",                 hl.dsp.window.move({ direction = "l" }))
+hl.bind(mainMod .. " + SHIFT + comma",                 hl.dsp.window.move({ direction = "d" }))
 hl.bind(mainMod .. " + SHIFT + 1",                    hl.dsp.window.move({ monitor = MONITOR1 }))
 hl.bind(mainMod .. " + SHIFT + 2",                    hl.dsp.window.move({ monitor = MONITOR2 }))
 hl.bind(mainMod .. " + SHIFT + 3",                    hl.dsp.window.move({ monitor = MONITOR3 }))
@@ -153,7 +153,20 @@ hl.bind(mainMod .. " + mouse_up",             hl.dsp.focus({ workspace = "m+1" }
 hl.bind(mainMod .. " + CONTROL + mouse_up",   hl.dsp.focus({ workspace = "m-1" }))
 hl.bind(mainMod .. " + CONTROL + mouse_down", hl.dsp.focus({ workspace = "m+1" }))
 
--- Special workspace (scratchpad)
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special" }))
+-- Special workspaces (sratchpads)
+-- move focused window to workspace's scratchpad
+hl.bind(mainMod .. " + SHIFT + S", function()
+    local ws = hl.get_active_workspace()
+    hl.dispatch(hl.dsp.window.move({
+        workspace = 'special:scratch_' .. ws.id,
+        follow = false
+    }))
+end)
+
+-- toggle focused workspace's scratchpad
+hl.bind(mainMod .. " + S", function()
+    local ws = hl.get_active_workspace()
+    hl.dispatch(hl.dsp.workspace.toggle_special('scratch_' .. ws.id))
+end)
+
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "+0" })) -- homebrew
-hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())
