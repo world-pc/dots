@@ -41,4 +41,14 @@
   (interactive)
   (compile (concat "go run " (shell-quote-argument buffer-file-name))))
 
-(global-set-key (kbd "C-c x") #'my/go-build-current-file)
+(global-set-key (kbd "C-c x") #'my/go-run-current-file)
+
+;; go-mode tab formatting
+(add-hook 'go-mode-hook
+	  (lambda ()
+	    (setq tab-width 4)))
+
+;; scrolling instead of pageup/pagedown
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq scroll-margin 3)
