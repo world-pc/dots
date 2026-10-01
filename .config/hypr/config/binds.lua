@@ -2,6 +2,16 @@ local mainMod = "SUPER"
 local noctCall = "noctalia msg "
 local launchPrefix = "uwsm app -- " -- if you are not using UWSM, make this empty (e.g. "")
 
+
+
+
+
+---------------------------------
+---- CONFIGURATION VARIABLES ----
+---------------------------------
+
+TWIN_MONITORS=true
+
 ---------------------------
 ---- WINDOW MANAGEMENT ----
 ---------------------------
@@ -72,7 +82,7 @@ hl.bind(mainMod .. " + C",          hl.dsp.exec_cmd(launchPrefix .. CALCULATOR))
 hl.bind("XF86Calculator",           hl.dsp.exec_cmd(launchPrefix .. CALCULATOR))
 hl.bind(mainMod .. " + W",          hl.dsp.exec_cmd(launchPrefix .. BROWSER))
 hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. " -e btop"))
-hl.bind(mainMod .. " + Z",          hl.dsp.exec_cmd(noctCall .. "settings-toggle"))
+hl.bind(mainMod .. " + I",          hl.dsp.exec_cmd(noctCall .. "settings-toggle")) -- Modified to I instead of default Z
 hl.bind(mainMod .. " + X",          hl.dsp.exec_cmd(noctCall .. "panel-toggle control-center"))
 hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher"))
 hl.bind(mainMod .. " + period",     hl.dsp.exec_cmd(noctCall .. "panel-toggle launcher /emo"))
@@ -143,8 +153,45 @@ for i = 1, NUM_WPM do
 end
 
 -- Move to adjacent workspaces and next empty on a given monitor
-hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "m+1" }))
-hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "m-1" }))
+
+--
+if TWIN_MONITORS then
+
+    hl.bind(mainMod .. " + CONTROL + Right", function()
+
+        local curr_ws_id = hl.get_active_workspace().id
+
+        if curr_ws_id <= 9 then
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id+9+1 }))
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id+1 }))
+        else
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id-9+1 }))
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id+1 }))
+        end
+
+    end)
+
+    -- hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "m-1" }))
+    hl.bind(mainMod .. " + CONTROL + Left", function()
+
+        local curr_ws_id = hl.get_active_workspace().id
+
+        if curr_ws_id <= 9 then
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id+9-1 }))
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id-1 }))
+        else
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id-9-1 }))
+            hl.dispatch(hl.dsp.focus({ workspace = curr_ws_id-1 }))
+        end
+
+    end)
+
+else
+    hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "m+1" }))
+    hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "m-1" }))
+end
+
+
 hl.bind(mainMod .. " + CONTROL + Down",        hl.dsp.focus({ workspace = "emptym" }))
 
 -- Scroll through existing workspaces & monitors
