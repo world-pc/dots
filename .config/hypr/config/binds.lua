@@ -10,7 +10,7 @@ local launchPrefix = "uwsm app -- " -- if you are not using UWSM, make this empt
 ---- CONFIGURATION VARIABLES ----
 ---------------------------------
 
-TWIN_MONITORS=true
+TWIN_MONITORS=false
 
 ---------------------------
 ---- WINDOW MANAGEMENT ----
